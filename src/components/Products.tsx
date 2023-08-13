@@ -6,8 +6,11 @@ import Image from "next/image";
 import { HiShoppingCart } from "react-icons/hi";
 import { FaHeart } from "react-icons/fa";
 import FormattedPrice from "./FormattedPrice";
+import { useDispatch } from "react-redux";
+import { addToCart, addToFavorite } from "@/store/nextSlice";
 
 const Products = ({ productData }: any) => {
+  const dispatch = useDispatch();
   return (
     <div className="w-full px-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
       {productData.map(
@@ -36,7 +39,24 @@ const Products = ({ productData }: any) => {
               />
               <div className="absolute top-5 right-5 cursor-pointer">
                 <span>
-                  <FaHeart />
+                  <FaHeart
+                    onClick={() =>
+                      dispatch(
+                        addToFavorite({
+                          _id: _id,
+                          brand: brand,
+                          category: category,
+                          description: description,
+                          image: image,
+                          isNew: isNew,
+                          oldPrice: oldPrice,
+                          price: price,
+                          title: title,
+                          quantity: 1,
+                        })
+                      )
+                    }
+                  />
                 </span>
               </div>
               {isNew && (
@@ -65,22 +85,22 @@ const Products = ({ productData }: any) => {
               <div className="flex w-full justify-between items-center gap-3 mt-3">
                 <div>
                   <button
-                    // onClick={() =>
-                    //   dispatch(
-                    //     addToCart({
-                    //       _id: _id,
-                    //       brand: brand,
-                    //       category: category,
-                    //       description: description,
-                    //       image: image,
-                    //       isNew: isNew,
-                    //       oldPrice: oldPrice,
-                    //       price: price,
-                    //       title: title,
-                    //       quantity: 1,
-                    //     })
-                    //   )
-                    // }
+                    onClick={() =>
+                      dispatch(
+                        addToCart({
+                          _id: _id,
+                          brand: brand,
+                          category: category,
+                          description: description,
+                          image: image,
+                          isNew: isNew,
+                          oldPrice: oldPrice,
+                          price: price,
+                          title: title,
+                          quantity: 1,
+                        })
+                      )
+                    }
                     className="px-10 h-10 font-medium bg-amazon_blue text-white rounded-md hover:bg-amazon_yellow hover:text-black duration-300"
                   >
                     add to cart
@@ -88,7 +108,24 @@ const Products = ({ productData }: any) => {
                 </div>
 
                 <span className="p-2 text-xl hover:bg-amazon_yellow bg-black hover:text-black text-white rounded duration-300">
-                  <HiShoppingCart />
+                  <HiShoppingCart
+                    onClick={() =>
+                      dispatch(
+                        addToCart({
+                          _id: _id,
+                          brand: brand,
+                          category: category,
+                          description: description,
+                          image: image,
+                          isNew: isNew,
+                          oldPrice: oldPrice,
+                          price: price,
+                          title: title,
+                          quantity: 1,
+                        })
+                      )
+                    }
+                  />
                 </span>
               </div>
             </div>
