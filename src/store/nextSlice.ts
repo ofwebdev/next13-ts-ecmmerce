@@ -24,7 +24,7 @@ export const nextSlice = createSlice({
         addToCart : function (state, action) {
             // state.productData =  action.payload;
             const existingProduct = state.productData.find((item:StoreProduct) => {
-                item._id === action.payload._id
+                return item._id === action.payload._id
             })
 
             if(existingProduct) {
@@ -34,9 +34,10 @@ export const nextSlice = createSlice({
             }
         },
 
+    
         addToFavorite: (state, action ) => {
             const existingProduct =  state.favoriteData.find((item: StoreProduct) => {
-                item._id === action.payload._id
+                return item._id === action.payload._id
             })
 
             if(existingProduct) {
@@ -47,31 +48,30 @@ export const nextSlice = createSlice({
         },
 
         increaseQuantity : (state, action) => {
-            const existingProduct =  state.favoriteData.find((item: StoreProduct) => {
-                item._id === action.payload._id
+            const existingProduct =  state.productData.find((item: StoreProduct) => {
+                return item._id === action.payload._id
             })
-
-            if (existingProduct) {
-                existingProduct && existingProduct.quantity++
-            }
+            
+            existingProduct && existingProduct.quantity++
+    
         },
 
         decreaseQuantity : (state, action) => {
-            const existingProduct =  state.favoriteData.find((item: StoreProduct) => {
-                item._id === action.payload._id
+            const existingProduct =  state.productData.find((item: StoreProduct) => {
+                return item._id === action.payload._id
             })
 
             if (existingProduct?.quantity === 1) {
-                existingProduct.quantity= 1
+                existingProduct.quantity = 1
             } else {
-                existingProduct!.quantity--
+                existingProduct!.quantity--;
             }
         },
 
 
         deleteProduct: (state, action)  => {
             state.productData = state.productData.filter((item: StoreProduct) => {
-                item._id !== action.payload
+                return item._id !== action.payload
             })
         },
 
