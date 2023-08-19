@@ -3,6 +3,7 @@ import Banner from "@/components/Banner";
 import Products from "@/components/Products";
 
 import { ProductProps } from "../../type";
+import FacebookMassager from "@/components/FacebookMassager";
 
 interface Props {
   productData: ProductProps;
@@ -20,6 +21,7 @@ export default function Home({ productData }: Props) {
           </div>
           Main
         </div>
+        <FacebookMassager />
       </main>
     </div>
   );
