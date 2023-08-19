@@ -9,6 +9,7 @@ export interface NextState {
     userInfo: null | String,
 }
   
+// Global State 
 const initialState:  NextState = {
     productData: [],
     favoriteData: [],

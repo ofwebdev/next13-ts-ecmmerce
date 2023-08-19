@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // Imported img
 import logo from "../../images/logo.png";
@@ -12,15 +12,42 @@ import Link from "next/link";
 import { BiCaretDown } from "react-icons/bi";
 import { HiOutlineSearch } from "react-icons/hi";
 import { SlLocationPin } from "react-icons/sl";
-import { useSelector } from "react-redux";
+
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+import { addUser } from "@/store/nextSlice";
+
+// Types
 import { StateProps } from "../../../type";
 
+// Auth
+import { useSession, signIn, signOut } from "next-auth/react";
+
 const Header = () => {
-  const { productData, favoriteData } = useSelector(
+  // Auth session
+  const { data: session } = useSession();
+
+  // Redux selector
+  const { productData, favoriteData, userInfo } = useSelector(
     (state: StateProps) => state.next
   );
 
-  console.log(productData, favoriteData);
+  // redux dispatch
+  const dispatch = useDispatch();
+
+  console.log(session);
+
+  useEffect(() => {
+    if (session) {
+      dispatch(
+        addUser({
+          name: session?.user?.name,
+          email: session?.user?.email,
+          image: session?.user?.image,
+        })
+      );
+    }
+  }, []);
 
   return (
     <div className="w-full h-20 bg-amazon_blue text-lightText sticky top-0 z-50">
@@ -56,18 +83,32 @@ const Header = () => {
           </span>
         </div>
 
-        <div
-          // onClick={() => signIn()}
-          className="text-xs text-gray-100 flex flex-col justify-center px-2 border border-transparent hover:border-white cursor-pointer duration-300 h-[70%]"
-        >
-          <p>Hello, sign in</p>
-          <p className="text-white font-bold flex items-center">
-            Account & Lists
-            <span>
-              <BiCaretDown />
-            </span>
-          </p>
-        </div>
+        {userInfo ? (
+          <div className="flex items-center px-2 border border-transparent hover:border-white cursor-pointer duration-300 h-[70%] gap-1">
+            <img
+              src={userInfo.image}
+              alt="userImage"
+              className="w-8 h-8 rounded-full object-cover"
+            />
+            <div className="text-xs text-gray-100 flex flex-col justify-between">
+              <p className="text-white font-bold">{userInfo.name}</p>
+              <p>{userInfo.email}</p>
+            </div>
+          </div>
+        ) : (
+          <div
+            onClick={() => signIn()}
+            className="text-xs text-gray-100 flex flex-col justify-center px-2 border border-transparent hover:border-white cursor-pointer duration-300 h-[70%]"
+          >
+            <p>Hello, sign in</p>
+            <p className="text-white font-bold flex items-center">
+              Account & Lists{" "}
+              <span>
+                <BiCaretDown />
+              </span>
+            </p>
+          </div>
+        )}
 
         {/* favorite */}
         <Link
