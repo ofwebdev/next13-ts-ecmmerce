@@ -35,7 +35,7 @@ const Header = () => {
   // redux dispatch
   const dispatch = useDispatch();
 
-  console.log(session);
+  console.log(userInfo);
 
   useEffect(() => {
     if (session) {

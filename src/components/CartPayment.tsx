@@ -1,10 +1,18 @@
+import { useEffect, useState } from "react";
+
 import { SiMediamarkt } from "react-icons/si";
+
 import FormattedPrice from "./FormattedPrice";
+
+// Redux
 import { useDispatch, useSelector } from "react-redux";
 import { StateProps, StoreProduct } from "../../type";
-import { useEffect, useState } from "react";
-// import { loadStripe } from "@stripe/stripe-js";
-// import { useSession } from "next-auth/react";
+
+// Stripe
+import { loadStripe } from "@stripe/stripe-js";
+
+// Auth session
+import { useSession } from "next-auth/react";
 
 const CartPayment = () => {
   const { productData, userInfo } = useSelector(
@@ -20,32 +28,35 @@ const CartPayment = () => {
     setTotalAmount(amt);
   }, [productData]);
 
-  // Striep payment
-  //   const stripePromise = loadStripe(
-  //     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
-  //   );
-  //   const { data: session } = useSession();
+  // Stripe payment
+  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUB_KEY!);
+
+  // console.log(process.env.NEXT_PUBLIC_STRIPE_PUB_KEY);
+
+  // user session next auth
+  const { data: session } = useSession();
 
   const handleCheckout = async () => {
-    // const stripe = await stripePromise;
+    const stripe = await stripePromise;
 
     const response = await fetch("/api/checkout", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "content-Type": "application/json",
       },
-      //   body: JSON.stringify({ items: productData, email: session?.user?.email }),
+      body: JSON.stringify({ items: productData, email: session?.user?.email }),
     });
     const checkoutSession = await response.json();
 
     // Redirecting user/customer to Stripe Checkout
-    // const result: any = await stripe?.redirectToCheckout({
-    //   sessionId: checkoutSession.id,
-    // });
-    // if (result.error) {
-    //   alert(result?.error.message);
-    // }
+    const result: any = await stripe?.redirectToCheckout({
+      sessionId: checkoutSession.id,
+    });
+    if (result.error) {
+      alert(result?.error.message);
+    }
   };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-2">
